@@ -151,7 +151,6 @@ As variaveis foram agrupadas por contexto:
 
 Quando as variaveis crescem sem padrao, surgem problemas como:
 
-- nomes ambigous
 - nomes ambiguos
 - duplicacao
 - configuracao dificil de entender
