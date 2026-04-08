@@ -1,0 +1,39 @@
+# Node.js
+node_modules/
+dist/
+build/
+.turbo/
+.pnpm-store/
+coverage/
+
+# Python
+__pycache__/
+.pytest_cache/
+.venv/
+*.pyc
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS / Editor
+.DS_Store
+.idea/
+.vscode/
+.codex
+
+# Prisma
+*.db
+*.db-journal
+
+# Docker / local infra
+.azurite/
+tmp/

@@ -1,0 +1,7 @@
+{
+  "name": "web-socket",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Monorepo de estudo para NestJS, Azure Functions, WebSocket, Azurite e PostgreSQL com DDD e Clean Architecture.",
+  "packageManager": "pnpm@10.8.1"
+}
