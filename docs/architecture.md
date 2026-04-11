@@ -799,3 +799,72 @@ Essa combinação é muito boa para estudo porque mostra, no mesmo projeto:
 - processamento assíncrono
 - persistência
 - eventos em tempo real
+
+## 19. Evolução de infraestrutura
+
+O projeto passa a ter agora uma direção de infraestrutura mais clara:
+
+- `docker compose` fica restrito ao desenvolvimento local
+- `Kubernetes` vira o modelo principal de orquestração
+- `kind` será o laboratório local para estudar Kubernetes sem depender de cloud
+- `AWS` será a referência de arquitetura em nuvem
+
+### 19.1 Por que `docker compose` fica só no desenvolvimento
+
+O `compose` é excelente para:
+
+- subir dependências rapidamente
+- iterar localmente
+- depurar integrações
+
+Mas ele não deve representar produção quando o alvo real é Kubernetes. Manter `compose` como se fosse “quase produção” costuma gerar uma falsa equivalência entre ambientes.
+
+Por isso, a regra do projeto passa a ser:
+
+- `compose` para produtividade local
+- `k8s` para orquestração real
+
+### 19.2 Topologia alvo local
+
+Para estudo local, a evolução recomendada é:
+
+1. `docker compose` para bootstrap inicial
+2. `kind` para cluster Kubernetes local
+3. `Kustomize` para aplicar os manifests
+
+### 19.3 Topologia alvo em cloud
+
+Pensando em AWS, a arquitetura-alvo mais coerente para este projeto é:
+
+- `Amazon EKS` para orquestração
+- `Amazon ECR` para imagens
+- `Amazon RDS for PostgreSQL` para banco gerenciado
+- `Amazon S3` para armazenamento de objetos
+
+### 19.4 Equivalências conceituais importantes
+
+No laboratório local:
+
+- `Azurite` representa o papel de object storage
+- `postgres` em container representa o papel de banco relacional
+
+Na AWS:
+
+- `Amazon S3` assume o papel do object storage
+- `Amazon RDS for PostgreSQL` assume o papel do banco gerenciado
+
+### 19.5 O que muda no processamento da imagem
+
+No desenho original, a Function em Python ocupava o papel de processador técnico assíncrono.
+
+Com a trilha Kubernetes aberta, teremos duas opções conceituais:
+
+- manter um processador em container no cluster
+- no futuro comparar isso com uma alternativa serverless da AWS
+
+Para este repositório, a trilha principal recomendada é:
+
+- `api` em container
+- `image-processor-function` evoluindo para workload em Kubernetes
+
+Isso mantém coerência com o objetivo de estudar Kubernetes de forma prática.

@@ -30,6 +30,9 @@ O fluxo que vamos construir é:
 - [Checklist por etapas](/home/alexandre/workspace/web-socket/docs/checklist.md)
 - [Fundação da Fase 1](/home/alexandre/workspace/web-socket/docs/fase-1-fundacao.md)
 - [Infraestrutura local da Fase 2](/home/alexandre/workspace/web-socket/docs/fase-2-infra-local.md)
+- [Plano de migração para Kubernetes](/home/alexandre/workspace/web-socket/docs/kubernetes-migration.md)
+- [Tutorial do laboratório local com kind](/home/alexandre/workspace/web-socket/docs/local-kind-tutorial.md)
+- [Guia iniciante de AWS](/home/alexandre/workspace/web-socket/docs/aws-beginner-guide.md)
 - [Convenções iniciais](/home/alexandre/workspace/web-socket/docs/conventions.md)
 
 ## Resultado esperado
@@ -86,3 +89,10 @@ A Fase 2 adiciona:
 - containers locais para `postgres`, `azurite`, `api` e `image-processor-function`
 - Dockerfiles multistage para desenvolvimento e produção
 - documentação operacional da stack local
+
+O próximo ciclo do projeto será:
+
+- `docker compose` apenas para desenvolvimento local
+- `kind` para laboratório local de Kubernetes
+- `infra/k8s` para manifests e overlays
+- `AWS` como referência de destino em cloud

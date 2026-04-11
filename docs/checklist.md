@@ -10,7 +10,7 @@ Este checklist foi organizado para que você consiga estudar e implementar por p
 - [x] Definir padrão de variáveis de ambiente
 - [x] Definir convenção de nomes dos serviços e containers
 
-## Fase 2. Infraestrutura local com Docker
+## Fase 2. Infraestrutura local com Docker Compose para desenvolvimento
 
 - [x] Criar `docker-compose.yml`
 - [x] Subir container do `postgres`
@@ -122,6 +122,36 @@ Este checklist foi organizado para que você consiga estudar e implementar por p
 - [ ] Documentar como subir tudo localmente
 - [ ] Documentar contratos WebSocket
 - [ ] Documentar decisões arquiteturais
+
+## Fase 14. Laboratório local com Kubernetes
+
+- [ ] Instalar e validar `kubectl`
+- [ ] Instalar e validar `kind`
+- [ ] Criar configuração local do cluster `kind`
+- [ ] Subir cluster local com namespace do projeto
+- [ ] Definir política de segurança mínima para o namespace
+- [ ] Documentar o fluxo local com `kubectl` e `kind`
+
+## Fase 15. Manifests Kubernetes do projeto
+
+- [ ] Criar estrutura `infra/k8s/base`
+- [ ] Criar estrutura `infra/k8s/overlays/local-kind`
+- [ ] Criar `Deployment` e `Service` da `api`
+- [ ] Criar `Deployment` e `Service` do `image-processor-function`
+- [ ] Criar recursos para `postgres` local de estudo
+- [ ] Criar recursos para `azurite` local de estudo
+- [ ] Criar `ConfigMap` e `Secret` de exemplo
+- [ ] Validar deploy local com `kubectl apply -k`
+
+## Fase 16. Trilha AWS
+
+- [ ] Definir arquitetura alvo na AWS
+- [ ] Definir estratégia de imagens com Amazon ECR
+- [ ] Definir estratégia de cluster com Amazon EKS
+- [ ] Definir estratégia de banco com Amazon RDS for PostgreSQL
+- [ ] Definir estratégia de storage com Amazon S3
+- [ ] Documentar tutorial iniciante de provisionamento
+- [ ] Documentar cuidados de custo e segurança
 
 ## Critérios de pronto do MVP
 

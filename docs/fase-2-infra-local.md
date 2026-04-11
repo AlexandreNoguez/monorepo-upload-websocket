@@ -7,6 +7,25 @@ Este documento registra o que foi feito na Fase 2 e explica:
 - por que adotamos `compose` base + override de desenvolvimento
 - por que usamos Dockerfiles multistage desde ja
 
+## Decisao arquitetural atualizada
+
+Com a abertura da trilha Kubernetes do projeto, a decisao oficial passa a ser:
+
+- `docker compose` existe para desenvolvimento local
+- `Kubernetes` sera o modelo principal de orquestracao
+- a trilha de cloud alvo sera documentada com foco em `AWS`
+
+Em outras palavras:
+
+- `compose` ajuda a desenvolver
+- `k8s` passa a representar a execucao real
+
+Para os proximos passos, consulte:
+
+- [Plano de migração para Kubernetes](/home/alexandre/workspace/web-socket/docs/kubernetes-migration.md)
+- [Tutorial do laboratório local com kind](/home/alexandre/workspace/web-socket/docs/local-kind-tutorial.md)
+- [Guia iniciante de AWS](/home/alexandre/workspace/web-socket/docs/aws-beginner-guide.md)
+
 ## 1. O que foi criado
 
 Arquivos principais:
