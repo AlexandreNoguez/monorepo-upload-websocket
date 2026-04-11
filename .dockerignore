@@ -1,0 +1,13 @@
+.git
+.gitignore
+.codex
+node_modules
+dist
+build
+coverage
+.venv
+__pycache__
+*.log
+.env
+.env.local
+.env.*.local

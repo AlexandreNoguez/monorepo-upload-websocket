@@ -29,6 +29,7 @@ O fluxo que vamos construir é:
 - [Arquitetura e plano do projeto](/home/alexandre/workspace/web-socket/docs/architecture.md)
 - [Checklist por etapas](/home/alexandre/workspace/web-socket/docs/checklist.md)
 - [Fundação da Fase 1](/home/alexandre/workspace/web-socket/docs/fase-1-fundacao.md)
+- [Infraestrutura local da Fase 2](/home/alexandre/workspace/web-socket/docs/fase-2-infra-local.md)
 - [Convenções iniciais](/home/alexandre/workspace/web-socket/docs/conventions.md)
 
 ## Resultado esperado
@@ -77,3 +78,9 @@ A Fase 1 do checklist foi iniciada com:
 - criação da estrutura inicial de pastas
 - padronização inicial de variáveis de ambiente
 - definição de convenções de nomes
+
+A Fase 2 adiciona:
+
+- `docker-compose.yml`
+- containers locais para `postgres`, `azurite`, `api` e `image-processor-function`
+- documentação operacional da stack local

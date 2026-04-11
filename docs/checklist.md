@@ -12,13 +12,13 @@ Este checklist foi organizado para que você consiga estudar e implementar por p
 
 ## Fase 2. Infraestrutura local com Docker
 
-- [ ] Criar `docker-compose.yml`
-- [ ] Subir container do `postgres`
-- [ ] Subir container do `azurite`
-- [ ] Subir container da `api`
-- [ ] Subir container da `azure function`
-- [ ] Validar rede interna entre containers
-- [ ] Documentar portas, volumes e credenciais locais
+- [x] Criar `docker-compose.yml`
+- [x] Subir container do `postgres`
+- [x] Subir container do `azurite`
+- [x] Subir container da `api`
+- [x] Subir container da `azure function`
+- [x] Validar rede interna entre containers
+- [x] Documentar portas, volumes e credenciais locais
 
 ## Fase 3. Base da API NestJS
 
