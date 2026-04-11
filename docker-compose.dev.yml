@@ -1,0 +1,24 @@
+services:
+  api:
+    build:
+      target: development
+    environment:
+      APP_RUNTIME: development
+    working_dir: /workspace/apps/api
+    volumes:
+      - ./package.json:/workspace/package.json:ro
+      - ./pnpm-workspace.yaml:/workspace/pnpm-workspace.yaml:ro
+      - ./apps/api:/workspace/apps/api
+      - ./packages:/workspace/packages
+      - ./docs:/workspace/docs:ro
+
+  image-processor-function:
+    build:
+      target: development
+    environment:
+      APP_RUNTIME: development
+    working_dir: /workspace/apps/image-processor-function
+    volumes:
+      - ./apps/image-processor-function:/workspace/apps/image-processor-function
+      - ./packages:/workspace/packages
+      - ./docs:/workspace/docs:ro

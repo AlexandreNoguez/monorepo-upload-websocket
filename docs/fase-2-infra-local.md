@@ -4,14 +4,15 @@ Este documento registra o que foi feito na Fase 2 e explica:
 
 - como a stack local foi montada
 - por que cada servico existe
-- por que os containers de `api` e `image-processor-function` ainda sao placeholders
-- quais seriam alternativas mais maduras
+- por que adotamos `compose` base + override de desenvolvimento
+- por que usamos Dockerfiles multistage desde ja
 
 ## 1. O que foi criado
 
 Arquivos principais:
 
 - [docker-compose.yml](/home/alexandre/workspace/web-socket/docker-compose.yml)
+- [docker-compose.dev.yml](/home/alexandre/workspace/web-socket/docker-compose.dev.yml)
 - [infra/docker/api/Dockerfile](/home/alexandre/workspace/web-socket/infra/docker/api/Dockerfile)
 - [infra/docker/function/Dockerfile](/home/alexandre/workspace/web-socket/infra/docker/function/Dockerfile)
 - [infra/scripts/validate-network.sh](/home/alexandre/workspace/web-socket/infra/scripts/validate-network.sh)
@@ -41,46 +42,84 @@ Foi escolhido agora porque:
 
 ### `api`
 
-Neste momento e um container de desenvolvimento para o futuro app NestJS.
+Neste momento e um container do futuro app NestJS com duas formas de execucao:
 
-Ele ainda nao sobe NestJS de verdade. Isso foi intencional.
+- `production` no arquivo base
+- `development` no arquivo de override
 
-Por que fazer assim?
+Ele ainda nao sobe NestJS de verdade. Em vez de `tail -f /dev/null`, agora ele sobe um servidor placeholder HTTP e responde healthcheck.
 
-- a Fase 2 e sobre infraestrutura base, nao sobre aplicacao
-- ainda nao criamos o app NestJS da Fase 3
-- mesmo assim, ja queremos reservar a identidade do servico, a porta e a rede
+Por que fazer assim agora?
+
+- a Fase 2 continua focada em infraestrutura
+- a stack passa a se comportar como servico real, ouvindo porta e respondendo healthcheck
+- quando a Fase 3 chegar, substituiremos o placeholder sem refazer a estrutura do container
 
 ### `image-processor-function`
 
-Neste momento e um container de desenvolvimento para a futura Azure Function.
+Neste momento e um container da futura Azure Function com duas formas de execucao:
 
-Ele ainda nao sobe Functions Host real. Isso tambem foi intencional.
+- `production` no arquivo base
+- `development` no arquivo de override
 
-Por que fazer assim?
+Ela ainda nao sobe o Functions Host real. Em vez de ficar parada, agora responde HTTP e healthcheck, o que torna a stack mais honesta.
 
-- a Function so sera implementada de verdade mais adiante
-- mesmo sem codigo funcional, ja queremos validar o papel do servico no ambiente
-- isso antecipa a rede, os mounts e a convencao de nomes sem inventar codigo cedo demais
+Por que fazer assim agora?
 
-## 3. Por que usar placeholders para `api` e `image-processor-function`
+- a Fase 8 ainda vai cuidar da Function real
+- a infraestrutura ja fica pronta para diferenciar runtime de desenvolvimento
+- conseguimos validar dependencia e rede com mais fidelidade
 
-Essa e uma das decisoes mais importantes da Fase 2.
+## 3. Por que usar `docker-compose.yml` base e `docker-compose.dev.yml` como override
 
-Se tentassemos subir NestJS e Azure Functions reais agora, cairiamos em dois problemas:
+Essa e a abordagem mais equilibrada para o projeto neste momento.
 
-- criariamos codigo de aplicacao antes da Fase 3
-- misturariamos infraestrutura com implementacao de negocio
+### O que cada arquivo representa
 
-Com placeholders:
+- `docker-compose.yml`: stack base, mais proxima de runtime estavel
+- `docker-compose.dev.yml`: ajustes de desenvolvimento, como bind mounts e target `development`
 
-- a Fase 2 continua focada em ambiente
-- a Fase 3 continua focada em app NestJS
-- a Fase 8 continua focada em Azure Functions
+### Por que isso e melhor do que um unico compose gigante
 
-Isso parece mais lento, mas na pratica reduz bagunca.
+- separa preocupacoes
+- evita condicao especial demais em um arquivo unico
+- deixa mais claro o que e infraestrutura base e o que e conveniencia de desenvolvimento
+- aproxima o projeto de um fluxo profissional sem exagerar na complexidade
 
-## 4. Portas, volumes e credenciais locais
+### Como isso conversa com os Dockerfiles multistage
+
+Os Dockerfiles agora possuem targets explicitos:
+
+- `production`
+- `development`
+
+Isso permite que o mesmo Dockerfile sirva a dois contextos:
+
+- imagem mais proxima do runtime final
+- imagem com comportamento de desenvolvimento
+
+O ganho aqui e muito importante: a gente evita manter dois Dockerfiles quase iguais e reduz divergencia entre ambientes.
+
+## 4. Por que os containers ainda usam placeholder servers
+
+Os placeholders continuam existindo, mas agora de forma melhor.
+
+Antes:
+
+- o container so ficava vivo com `tail -f /dev/null`
+- nao havia endpoint real
+- nao havia healthcheck verdadeiro para `api` e `function`
+
+Agora:
+
+- `api` responde em `http://localhost:3000`
+- `api` responde healthcheck em `http://localhost:3000/health`
+- `image-processor-function` responde em `http://localhost:7071`
+- `image-processor-function` responde healthcheck em `http://localhost:7071/health`
+
+Isso e melhor porque o container se comporta como servico, mesmo antes da aplicacao final existir.
+
+## 5. Portas, volumes e credenciais locais
 
 ### Portas publicadas
 
@@ -112,6 +151,8 @@ O arquivo de ambiente agora separa host da maquina e host interno do Docker:
 - `POSTGRES_CONTAINER_HOST=postgres`
 - `AZURITE_HOST=127.0.0.1`
 - `AZURITE_CONTAINER_HOST=azurite`
+- `AZURITE_BLOB_ENDPOINT=http://127.0.0.1:10000/devstoreaccount1`
+- `AZURITE_BLOB_ENDPOINT_DOCKER=http://azurite:10000/devstoreaccount1`
 - `FUNCTION_WEBSOCKET_URL=ws://localhost:3000/processing`
 - `FUNCTION_WEBSOCKET_URL_DOCKER=ws://api:3000/processing`
 
@@ -120,7 +161,9 @@ Isso foi feito porque o mesmo sistema enxerga enderecos diferentes:
 - fora do Docker, usa `localhost`
 - dentro do Docker, usa o nome do servico
 
-## 5. Validacao da rede
+Tambem foi ajustado o `DATABASE_URL` dentro dos containers para usar `postgres` em vez de `localhost`, o que e essencial para Prisma funcionar quando a API estiver pronta.
+
+## 6. Validacao da rede
 
 Foi criado o script [infra/scripts/validate-network.sh](/home/alexandre/workspace/web-socket/infra/scripts/validate-network.sh) para validar:
 
@@ -129,6 +172,13 @@ Foi criado o script [infra/scripts/validate-network.sh](/home/alexandre/workspac
 - `image-processor-function -> postgres`
 - `image-processor-function -> azurite`
 
+Por padrao, ele valida a stack de desenvolvimento:
+
+- `docker-compose.yml`
+- `docker-compose.dev.yml`
+
+Mas tambem pode ser usado com outros arquivos Compose.
+
 Essa validacao e importante porque, em sistemas distribuidos, uma parte grande dos problemas aparece antes mesmo da regra de negocio:
 
 - DNS interno
@@ -136,29 +186,47 @@ Essa validacao e importante porque, em sistemas distribuidos, uma parte grande d
 - dependencia subindo fora de ordem
 - container acessivel da maquina mas nao de outro container
 
-## 6. Haveria maneiras melhores de fazer?
+## 7. Como usar
 
-Sim, dependendo do momento do projeto.
+### Subir modo base
 
-### Melhor para um projeto mais maduro
+```bash
+docker compose up -d --build
+```
 
-- usar `docker compose override` para desenvolvimento
-- subir NestJS real com hot reload
-- subir Azure Functions Host real
-- separar arquivos `.env` por servico
-- adicionar healthchecks tambem para `api` e `function`
+Esse modo usa o `docker-compose.yml` sozinho e constroi as imagens com target `production`.
 
-### Melhor para um time maior
+### Subir modo desenvolvimento
 
-- usar `Tilt`, `Dev Containers` ou `Skaffold`
-- padronizar scripts de bootstrap
-- usar imagens mais proximas da producao
+```bash
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
+```
 
-### Por que nao fizemos isso agora
+Esse modo usa:
 
-Porque ainda estamos construindo entendimento. Se trouxermos toda a sofisticacao agora, o estudo perde foco.
+- bind mounts
+- target `development`
+- a mesma base estrutural do compose principal
 
-## 7. Resultado da Fase 2
+### Validar a rede do modo desenvolvimento
+
+```bash
+sh infra/scripts/validate-network.sh
+```
+
+### Validar a rede de outro conjunto de arquivos Compose
+
+```bash
+sh infra/scripts/validate-network.sh -f docker-compose.yml
+```
+
+### Derrubar a stack
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.dev.yml down
+```
+
+## 8. Resultado da Fase 2
 
 Ao final desta fase, o projeto passa a ter:
 
@@ -166,6 +234,9 @@ Ao final desta fase, o projeto passa a ter:
 - banco local persistente
 - emulacao local do Azure Storage
 - nomes de servico estaveis
+- compose base e override de desenvolvimento
+- Dockerfiles multistage para `production` e `development`
+- healthchecks reais para `api`, `function` e `postgres`
 - validacao pratica de rede entre os containers
 
 Isso prepara o terreno para a Fase 3, onde a `api` deixa de ser placeholder e vira uma aplicacao NestJS real.

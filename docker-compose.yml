@@ -46,18 +46,20 @@ services:
       - backend
 
   api:
+    image: web-socket-api:local
     build:
       context: .
       dockerfile: infra/docker/api/Dockerfile
+      target: production
     restart: unless-stopped
     env_file:
       - .env.example
-    working_dir: /workspace/apps/api
-    command: ["sh", "-c", "echo 'api dev container ready'; tail -f /dev/null"]
-    volumes:
-      - ./apps/api:/workspace/apps/api
-      - ./packages:/workspace/packages
-      - ./docs:/workspace/docs:ro
+    environment:
+      APP_RUNTIME: production
+      POSTGRES_HOST: postgres
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/image_pipeline?schema=public
+      AZURITE_HOST: azurite
+      AZURITE_BLOB_ENDPOINT: http://azurite:10000/devstoreaccount1
     ports:
       - "3000:3000"
     depends_on:
@@ -65,27 +67,31 @@ services:
         condition: service_healthy
       azurite:
         condition: service_started
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:3000/health >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     networks:
       - backend
 
   image-processor-function:
+    image: web-socket-image-processor-function:local
     build:
       context: .
       dockerfile: infra/docker/function/Dockerfile
+      target: production
     restart: unless-stopped
     env_file:
       - .env.example
-    working_dir: /workspace/apps/image-processor-function
-    command:
-      [
-        "sh",
-        "-c",
-        "echo 'image processor function dev container ready'; tail -f /dev/null"
-      ]
-    volumes:
-      - ./apps/image-processor-function:/workspace/apps/image-processor-function
-      - ./packages:/workspace/packages
-      - ./docs:/workspace/docs:ro
+    environment:
+      APP_RUNTIME: production
+      POSTGRES_HOST: postgres
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/image_pipeline?schema=public
+      AZURITE_HOST: azurite
+      AZURITE_BLOB_ENDPOINT: http://azurite:10000/devstoreaccount1
+      FUNCTION_WEBSOCKET_URL: ws://api:3000/processing
     ports:
       - "7071:7071"
     depends_on:
@@ -93,6 +99,14 @@ services:
         condition: service_healthy
       azurite:
         condition: service_started
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:7071/health >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     networks:
       - backend
 

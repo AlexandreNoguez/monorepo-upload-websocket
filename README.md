@@ -82,5 +82,7 @@ A Fase 1 do checklist foi iniciada com:
 A Fase 2 adiciona:
 
 - `docker-compose.yml`
+- `docker-compose.dev.yml`
 - containers locais para `postgres`, `azurite`, `api` e `image-processor-function`
+- Dockerfiles multistage para desenvolvimento e produção
 - documentação operacional da stack local
