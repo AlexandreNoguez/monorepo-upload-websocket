@@ -99,3 +99,10 @@ O próximo ciclo do projeto será:
 - `kind` para laboratório local de Kubernetes
 - `infra/k8s` para manifests e overlays
 - `AWS` como referência de destino em cloud
+
+O laboratório Kubernetes agora já inclui:
+
+- workloads da `api` e da `image-processor-function`
+- `ConfigMap` e `Secret` gerados a partir de arquivos `.env`
+- `postgres` via `StatefulSet`
+- `azurite` com volume persistente

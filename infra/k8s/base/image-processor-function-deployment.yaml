@@ -1,11 +1,15 @@
+# API do grupo de workloads gerenciados.
 apiVersion: apps/v1
+# A Function tambem e empacotada como Deployment para o laboratorio.
 kind: Deployment
 metadata:
+  # Nome do recurso dentro do namespace.
   name: image-processor-function
   labels:
     app.kubernetes.io/name: image-processor-function
     app.kubernetes.io/part-of: web-socket
 spec:
+  # Uma replica basta para estudo nesta etapa.
   replicas: 1
   selector:
     matchLabels:
@@ -19,14 +23,18 @@ spec:
     spec:
       containers:
         - name: image-processor-function
+          # Imagem base; o overlay local troca para a tag carregada no kind.
           image: web-socket-image-processor-function:latest
           imagePullPolicy: IfNotPresent
-          env:
-            - name: FUNCTION_APP_PORT
-              value: "7071"
-            - name: APP_RUNTIME
-              value: "production"
+          envFrom:
+            # Importa configuracoes nao sensiveis do ambiente.
+            - configMapRef:
+                name: app-config
+            # Importa segredos locais usados pela Function.
+            - secretRef:
+                name: app-secrets
           ports:
+            # Porta nomeada para reaproveitar em probe e Service.
             - containerPort: 7071
               name: http
           readinessProbe:

@@ -399,12 +399,32 @@ Quando os workloads reais estiverem sendo usados:
 sh infra/scripts/kind-load-images.sh
 ```
 
+### Preparar os arquivos `.env` do overlay local
+
+Se os arquivos reais ainda nao existirem, gere-os a partir dos exemplos versionados:
+
+```bash
+sh infra/scripts/k8s-prepare-local-env.sh
+```
+
+### O que esse script faz
+
+- cria `infra/k8s/overlays/local-kind/app-config.env` a partir do exemplo
+- cria `infra/k8s/overlays/local-kind/app-secrets.env` a partir do exemplo
+- preserva seus arquivos locais se eles ja existirem
+
 ### O que isso aplica
 
 Neste momento, a base local aplica:
 
 - o namespace `web-socket`
 - labels de seguranca com `Pod Security Admission` em `baseline`
+- `ConfigMap` da aplicacao gerado a partir de `.env`
+- `Secret` local do laboratorio gerado a partir de `.env`
+- `Deployment` e `Service` da `api`
+- `Deployment` e `Service` da `image-processor-function`
+- `StatefulSet` e `Service` do `postgres`
+- `Deployment`, `Service` e `PVC` do `azurite`
 
 ## 16. Como validar o laboratorio Kubernetes
 
@@ -424,6 +444,16 @@ kubectl get namespace web-socket
 
 ```bash
 kubectl kustomize infra/k8s/overlays/local-kind
+```
+
+### Ver os workloads criados
+
+```bash
+kubectl get deployments -n web-socket
+kubectl get statefulsets -n web-socket
+kubectl get services -n web-socket
+kubectl get pvc -n web-socket
+kubectl get pods -n web-socket
 ```
 
 ## 17. Como desligar tudo

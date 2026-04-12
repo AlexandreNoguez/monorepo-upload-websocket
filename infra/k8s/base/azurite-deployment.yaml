@@ -1,0 +1,79 @@
+# API do grupo de workloads.
+apiVersion: apps/v1
+# Azurite e stateless do ponto de vista do processo, entao um Deployment atende bem.
+kind: Deployment
+metadata:
+  # Nome do recurso do emulador de storage.
+  name: azurite
+  labels:
+    app.kubernetes.io/name: azurite
+    app.kubernetes.io/part-of: web-socket
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: azurite
+      app.kubernetes.io/part-of: web-socket
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: azurite
+        app.kubernetes.io/part-of: web-socket
+    spec:
+      containers:
+        - name: azurite
+          # Imagem oficial do Azurite para emular Blob, Queue e Table.
+          image: mcr.microsoft.com/azure-storage/azurite
+          imagePullPolicy: IfNotPresent
+          command:
+            # Binario principal do Azurite.
+            - azurite
+            # Escuta o endpoint de blob em todas as interfaces da rede do pod.
+            - --blobHost
+            - 0.0.0.0
+            # Escuta o endpoint de queue em todas as interfaces.
+            - --queueHost
+            - 0.0.0.0
+            # Escuta o endpoint de table em todas as interfaces.
+            - --tableHost
+            - 0.0.0.0
+            # Local onde os dados serao persistidos.
+            - --location
+            - /data
+            # Arquivo de log simples para debug local.
+            - --debug
+            - /data/debug.log
+          ports:
+            - name: blob
+              containerPort: 10000
+            - name: queue
+              containerPort: 10001
+            - name: table
+              containerPort: 10002
+          volumeMounts:
+            # Monta o PVC onde os dados locais do Azurite serao salvos.
+            - name: azurite-data
+              mountPath: /data
+          readinessProbe:
+            # Basta validar se a porta de blob esta aceitando conexoes.
+            tcpSocket:
+              port: blob
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: blob
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 300m
+              memory: 256Mi
+      volumes:
+        - name: azurite-data
+          persistentVolumeClaim:
+            # Conecta o PVC criado separadamente ao pod do Azurite.
+            claimName: azurite-data

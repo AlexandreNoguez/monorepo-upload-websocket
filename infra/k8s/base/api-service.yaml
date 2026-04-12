@@ -1,15 +1,21 @@
+# API basica do Kubernetes para Services.
 apiVersion: v1
+# O Service da um endereco estavel para os pods da API.
 kind: Service
 metadata:
+  # Nome usado pelos outros pods para acessar a API dentro do cluster.
   name: api
   labels:
     app.kubernetes.io/name: api
     app.kubernetes.io/part-of: web-socket
 spec:
   selector:
+    # O Service envia trafego apenas para pods com essas labels.
     app.kubernetes.io/name: api
     app.kubernetes.io/part-of: web-socket
   ports:
     - name: http
+      # Porta exposta pelo Service dentro do cluster.
       port: 3000
+      # Porta de destino dentro do container selecionado.
       targetPort: http

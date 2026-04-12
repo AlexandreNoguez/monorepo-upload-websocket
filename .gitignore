@@ -16,6 +16,8 @@ __pycache__/
 .env
 .env.local
 .env.*.local
+infra/k8s/base/*.env
+infra/k8s/overlays/local-kind/*.env
 
 # Logs
 *.log
@@ -37,3 +39,5 @@ yarn-error.log*
 # Docker / local infra
 .azurite/
 tmp/
+kubectl
+kubectl.sha256

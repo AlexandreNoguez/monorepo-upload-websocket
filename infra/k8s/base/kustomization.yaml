@@ -1,9 +1,22 @@
+# Versao da API do Kustomize usada pelo kubectl.
 apiVersion: kustomize.config.k8s.io/v1beta1
+# Tipo do arquivo raiz que agrega os manifests base.
 kind: Kustomization
 
+# Lista de recursos carregados sempre que a base for aplicada.
 resources:
+  # Namespace compartilhado do projeto.
   - namespace.yaml
+  # API principal do sistema.
   - api-deployment.yaml
   - api-service.yaml
+  # Function responsavel por processar imagens.
   - image-processor-function-deployment.yaml
   - image-processor-function-service.yaml
+  # Banco local de estudo dentro do cluster.
+  - postgres-service.yaml
+  - postgres-statefulset.yaml
+  # Emulador local do Azure Storage.
+  - azurite-pvc.yaml
+  - azurite-deployment.yaml
+  - azurite-service.yaml

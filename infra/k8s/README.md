@@ -21,3 +21,6 @@ Primeiros artefatos ja criados:
 - `kustomization.yaml` para `base`
 - `kustomization.yaml` para `local-kind`
 - `kustomization.yaml` para `aws`
+- workloads iniciais da aplicacao
+- `ConfigMap` e `Secret` gerados por overlay
+- `postgres` e `azurite` para laboratorio no cluster

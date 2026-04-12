@@ -1,15 +1,21 @@
+# API basica usada pelos Services.
 apiVersion: v1
+# Service que estabiliza o endereco da Function dentro do cluster.
 kind: Service
 metadata:
+  # Nome DNS usado por outros pods.
   name: image-processor-function
   labels:
     app.kubernetes.io/name: image-processor-function
     app.kubernetes.io/part-of: web-socket
 spec:
   selector:
+    # O Service so aponta para os pods certos.
     app.kubernetes.io/name: image-processor-function
     app.kubernetes.io/part-of: web-socket
   ports:
     - name: http
+      # Porta interna usada por outros servicos do cluster.
       port: 7071
+      # Porta nomeada dentro do container.
       targetPort: http

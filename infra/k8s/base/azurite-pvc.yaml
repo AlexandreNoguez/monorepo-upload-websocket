@@ -1,0 +1,18 @@
+# API basica para volumes persistentes requisitados pelo pod.
+apiVersion: v1
+# PVC para guardar os blobs e filas do Azurite no cluster local.
+kind: PersistentVolumeClaim
+metadata:
+  # Nome usado pelo Deployment do Azurite.
+  name: azurite-data
+  labels:
+    app.kubernetes.io/name: azurite
+    app.kubernetes.io/part-of: web-socket
+spec:
+  accessModes:
+    # O volume sera montado por um unico pod por vez.
+    - ReadWriteOnce
+  resources:
+    requests:
+      # Espaco inicial para estudo local.
+      storage: 1Gi

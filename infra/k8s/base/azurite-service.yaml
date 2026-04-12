@@ -1,0 +1,24 @@
+# API basica dos Services.
+apiVersion: v1
+# Service para expor os endpoints internos do Azurite aos outros pods.
+kind: Service
+metadata:
+  # Nome DNS do emulador de storage dentro do cluster.
+  name: azurite
+  labels:
+    app.kubernetes.io/name: azurite
+    app.kubernetes.io/part-of: web-socket
+spec:
+  selector:
+    app.kubernetes.io/name: azurite
+    app.kubernetes.io/part-of: web-socket
+  ports:
+    - name: blob
+      port: 10000
+      targetPort: blob
+    - name: queue
+      port: 10001
+      targetPort: queue
+    - name: table
+      port: 10002
+      targetPort: table

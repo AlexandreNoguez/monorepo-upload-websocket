@@ -1,0 +1,23 @@
+# API basica usada para Services.
+apiVersion: v1
+# Service que entrega um nome de rede estavel ao PostgreSQL.
+kind: Service
+metadata:
+  # Nome DNS usado pelos pods clientes.
+  name: postgres
+  labels:
+    app.kubernetes.io/name: postgres
+    app.kubernetes.io/part-of: web-socket
+spec:
+  # headless Service para combinar melhor com StatefulSet.
+  clusterIP: None
+  selector:
+    # O Service seleciona apenas o pod do PostgreSQL.
+    app.kubernetes.io/name: postgres
+    app.kubernetes.io/part-of: web-socket
+  ports:
+    - name: postgres
+      # Porta padrao do banco.
+      port: 5432
+      # Porta do container.
+      targetPort: postgres

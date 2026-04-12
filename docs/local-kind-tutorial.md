@@ -150,6 +150,16 @@ Depois de buildar as imagens locais:
 sh infra/scripts/kind-load-images.sh
 ```
 
+### Preparar os arquivos `.env` do overlay
+
+Antes do apply, prepare os arquivos reais usados pelo `Kustomize`:
+
+```bash
+sh infra/scripts/k8s-prepare-local-env.sh
+```
+
+Esse script copia os exemplos versionados apenas se o arquivo real ainda nao existir.
+
 ### Aplicar manifests com Kustomize
 
 Quando a base estiver pronta:
@@ -157,6 +167,18 @@ Quando a base estiver pronta:
 ```bash
 sh infra/scripts/k8s-apply-local-kind.sh
 ```
+
+### O que entra no cluster nessa etapa
+
+Neste momento, o overlay local passa a aplicar:
+
+- namespace do projeto
+- `ConfigMap` compartilhado gerado a partir de `.env`
+- `Secret` local de estudo gerado a partir de `.env`
+- `Deployment` e `Service` da `api`
+- `Deployment` e `Service` do `image-processor-function`
+- `StatefulSet` e `Service` do `postgres`
+- `Deployment`, `Service` e `PVC` do `azurite`
 
 ## 8. Politica minima de seguranca
 
@@ -179,6 +201,13 @@ kubectl port-forward svc/image-processor-function 7071:7071 -n web-socket
 ```
 
 Isso e melhor para estudo do que expor tudo cedo demais.
+
+Se quiser inspecionar dependencias internas, voce tambem pode usar:
+
+```bash
+kubectl port-forward pod/postgres-0 5432:5432 -n web-socket
+kubectl port-forward svc/azurite 10000:10000 -n web-socket
+```
 
 ## 10. Como estudar sem se perder
 

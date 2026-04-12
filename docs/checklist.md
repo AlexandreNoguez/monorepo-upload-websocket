@@ -138,9 +138,9 @@ Este checklist foi organizado para que você consiga estudar e implementar por p
 - [x] Criar estrutura `infra/k8s/overlays/local-kind`
 - [x] Criar `Deployment` e `Service` da `api`
 - [x] Criar `Deployment` e `Service` do `image-processor-function`
-- [ ] Criar recursos para `postgres` local de estudo
-- [ ] Criar recursos para `azurite` local de estudo
-- [ ] Criar `ConfigMap` e `Secret` de exemplo
+- [x] Criar recursos para `postgres` local de estudo
+- [x] Criar recursos para `azurite` local de estudo
+- [x] Criar `ConfigMap` e `Secret` de exemplo
 - [ ] Validar deploy local com `kubectl apply -k`
 
 ## Fase 16. Trilha AWS

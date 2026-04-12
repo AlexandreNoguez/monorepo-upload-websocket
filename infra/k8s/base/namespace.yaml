@@ -1,10 +1,18 @@
+# Versao da API para objetos basicos do Kubernetes.
 apiVersion: v1
+# Tipo do recurso que estamos criando.
 kind: Namespace
 metadata:
+  # Nome do namespace isolado do projeto.
   name: web-socket
   labels:
+    # Label util para agrupar tudo o que pertence ao laboratorio.
     app.kubernetes.io/name: web-socket
+    # Label que indica o sistema ao qual este recurso pertence.
     app.kubernetes.io/part-of: web-socket
+    # Nivel minimo de seguranca aplicado aos pods deste namespace.
     pod-security.kubernetes.io/enforce: baseline
+    # Registra auditoria caso algo fuja da baseline.
     pod-security.kubernetes.io/audit: baseline
+    # Gera alertas quando algum manifesto tenta sair da baseline.
     pod-security.kubernetes.io/warn: baseline

@@ -1,15 +1,37 @@
+# Versao da API do Kustomize.
 apiVersion: kustomize.config.k8s.io/v1beta1
+# Tipo do arquivo que monta o overlay local.
 kind: Kustomization
 
+# Namespace onde todos os recursos do overlay serao aplicados.
 namespace: web-socket
 
 resources:
+  # Importa a base comum do projeto.
   - ../../base
 
+generatorOptions:
+  # Mantem nomes estaveis para os objetos gerados e facilita referencias nos Deployments.
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  # Gera o ConfigMap local a partir de um arquivo .env.
+  - name: app-config
+    envs:
+      - app-config.env
+
+secretGenerator:
+  # Gera o Secret local a partir de um arquivo .env.
+  - name: app-secrets
+    envs:
+      - app-secrets.env
+
 images:
+  # Reescreve a imagem da API para a tag local carregada com kind load.
   - name: web-socket-api:latest
     newName: web-socket-api
     newTag: local
+  # Reescreve a imagem da Function para a tag local carregada com kind load.
   - name: web-socket-image-processor-function:latest
     newName: web-socket-image-processor-function
     newTag: local
@@ -19,19 +41,15 @@ patches:
       kind: Deployment
       name: api
     patch: |-
+      # No kind local a imagem ja esta dentro do cluster, entao nao precisamos baixar de registry.
       - op: replace
         path: /spec/template/spec/containers/0/imagePullPolicy
         value: Never
-      - op: replace
-        path: /spec/template/spec/containers/0/env/1/value
-        value: development
   - target:
       kind: Deployment
       name: image-processor-function
     patch: |-
+      # Mesmo raciocinio da API: usa a imagem ja carregada no kind.
       - op: replace
         path: /spec/template/spec/containers/0/imagePullPolicy
         value: Never
-      - op: replace
-        path: /spec/template/spec/containers/0/env/1/value
-        value: development

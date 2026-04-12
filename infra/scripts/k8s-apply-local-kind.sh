@@ -7,6 +7,8 @@ if ! command -v kubectl >/dev/null 2>&1; then
   exit 1
 fi
 
+sh infra/scripts/k8s-prepare-local-env.sh
+
 echo "Applying local kind overlay"
 kubectl apply -k infra/k8s/overlays/local-kind
 

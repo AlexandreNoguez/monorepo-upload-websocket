@@ -1,50 +1,67 @@
+# API do grupo de workloads gerenciados.
 apiVersion: apps/v1
+# Vamos criar um Deployment para manter o pod da API sempre disponivel.
 kind: Deployment
 metadata:
+  # Nome do recurso dentro do namespace.
   name: api
   labels:
+    # Label principal usada por Service, observabilidade e filtros.
     app.kubernetes.io/name: api
+    # Indica a qual sistema maior este pod pertence.
     app.kubernetes.io/part-of: web-socket
 spec:
+  # Quantidade de replicas; 1 basta para estudo local.
   replicas: 1
   selector:
     matchLabels:
+      # O selector precisa casar exatamente com as labels do pod.
       app.kubernetes.io/name: api
       app.kubernetes.io/part-of: web-socket
   template:
     metadata:
       labels:
+        # Labels aplicadas aos pods criados por este Deployment.
         app.kubernetes.io/name: api
         app.kubernetes.io/part-of: web-socket
     spec:
       containers:
         - name: api
+          # Imagem base; o overlay local troca essa tag para a imagem carregada no kind.
           image: web-socket-api:latest
+          # Em ambientes normais o cluster tenta reaproveitar a imagem se ela ja existir.
           imagePullPolicy: IfNotPresent
-          env:
-            - name: API_PORT
-              value: "3000"
-            - name: APP_RUNTIME
-              value: "production"
+          envFrom:
+            # Importa todas as configuracoes nao sensiveis geradas para este ambiente.
+            - configMapRef:
+                name: app-config
+            # Importa todas as credenciais e connection strings do ambiente.
+            - secretRef:
+                name: app-secrets
           ports:
+            # Porta nomeada para ficar facil reutilizar em probes e Services.
             - containerPort: 3000
               name: http
           readinessProbe:
+            # Readiness verifica se o pod esta pronto para receber trafego.
             httpGet:
               path: /health
               port: http
             initialDelaySeconds: 3
             periodSeconds: 10
           livenessProbe:
+            # Liveness verifica se o processo continua saudavel ao longo do tempo.
             httpGet:
               path: /health
               port: http
             initialDelaySeconds: 10
             periodSeconds: 15
           resources:
+            # Requests ajudam o scheduler a reservar o minimo necessario.
             requests:
               cpu: 50m
               memory: 64Mi
+            # Limits evitam que o laboratorio consuma recursos demais.
             limits:
               cpu: 250m
               memory: 128Mi
