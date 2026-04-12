@@ -14,3 +14,10 @@ Estrutura prevista:
 - `overlays/local-kind`: ambiente local de estudo
 - `overlays/aws`: ambiente alvo na AWS
 - `kind`: artefatos e referencias do laboratorio local
+
+Primeiros artefatos ja criados:
+
+- namespace base com seguranca minima
+- `kustomization.yaml` para `base`
+- `kustomization.yaml` para `local-kind`
+- `kustomization.yaml` para `aws`

@@ -9,3 +9,8 @@ Exemplos futuros:
 - services
 - configmaps
 - secrets de exemplo
+
+Arquivos iniciais:
+
+- [namespace.yaml](/home/alexandre/workspace/web-socket/infra/k8s/base/namespace.yaml)
+- [kustomization.yaml](/home/alexandre/workspace/web-socket/infra/k8s/base/kustomization.yaml)

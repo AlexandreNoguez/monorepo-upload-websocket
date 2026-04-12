@@ -125,17 +125,17 @@ Este checklist foi organizado para que você consiga estudar e implementar por p
 
 ## Fase 14. Laboratório local com Kubernetes
 
-- [ ] Instalar e validar `kubectl`
+- [x] Instalar e validar `kubectl`
 - [ ] Instalar e validar `kind`
-- [ ] Criar configuração local do cluster `kind`
+- [x] Criar configuração local do cluster `kind`
 - [ ] Subir cluster local com namespace do projeto
-- [ ] Definir política de segurança mínima para o namespace
-- [ ] Documentar o fluxo local com `kubectl` e `kind`
+- [x] Definir política de segurança mínima para o namespace
+- [x] Documentar o fluxo local com `kubectl` e `kind`
 
 ## Fase 15. Manifests Kubernetes do projeto
 
-- [ ] Criar estrutura `infra/k8s/base`
-- [ ] Criar estrutura `infra/k8s/overlays/local-kind`
+- [x] Criar estrutura `infra/k8s/base`
+- [x] Criar estrutura `infra/k8s/overlays/local-kind`
 - [ ] Criar `Deployment` e `Service` da `api`
 - [ ] Criar `Deployment` e `Service` do `image-processor-function`
 - [ ] Criar recursos para `postgres` local de estudo

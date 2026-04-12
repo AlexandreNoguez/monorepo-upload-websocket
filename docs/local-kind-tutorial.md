@@ -89,6 +89,11 @@ Depois valide:
 kind version
 ```
 
+Observacao importante para este repositorio neste momento:
+
+- `kubectl` ja esta disponivel
+- `kind` ainda precisa ser instalado
+
 ### Passo 4. Confirmar que o `kubectl` suporta `-k`
 
 ```bash
@@ -97,15 +102,20 @@ kubectl kustomize --help
 
 Se esse comando responder, voce ja tem o necessario para usar `Kustomize` integrado.
 
-## 6. Estrutura que o repositorio passara a usar
+## 6. Estrutura que o repositorio passa a usar
 
 O repositorio agora ja reserva a estrutura:
 
 - [infra/k8s/README.md](/home/alexandre/workspace/web-socket/infra/k8s/README.md)
 - [infra/k8s/kind/cluster.example.yaml](/home/alexandre/workspace/web-socket/infra/k8s/kind/cluster.example.yaml)
+- [infra/k8s/base/namespace.yaml](/home/alexandre/workspace/web-socket/infra/k8s/base/namespace.yaml)
+- [infra/k8s/base/kustomization.yaml](/home/alexandre/workspace/web-socket/infra/k8s/base/kustomization.yaml)
 - [infra/k8s/base/README.md](/home/alexandre/workspace/web-socket/infra/k8s/base/README.md)
 - [infra/k8s/overlays/local-kind/README.md](/home/alexandre/workspace/web-socket/infra/k8s/overlays/local-kind/README.md)
 - [infra/k8s/overlays/aws/README.md](/home/alexandre/workspace/web-socket/infra/k8s/overlays/aws/README.md)
+- [infra/scripts/k8s-preflight.sh](/home/alexandre/workspace/web-socket/infra/scripts/k8s-preflight.sh)
+- [infra/scripts/kind-create-cluster.sh](/home/alexandre/workspace/web-socket/infra/scripts/kind-create-cluster.sh)
+- [infra/scripts/k8s-apply-local-kind.sh](/home/alexandre/workspace/web-socket/infra/scripts/k8s-apply-local-kind.sh)
 
 ## 7. Fluxo local recomendado
 
@@ -117,22 +127,18 @@ Esse passo continua util para desenvolvimento rapido:
 docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
 ```
 
-### Criar o cluster local
-
-Quando os manifests Kubernetes existirem, o fluxo sera algo assim:
+### Verificar prerequisitos do laboratorio
 
 ```bash
-kind create cluster --config infra/k8s/kind/cluster.example.yaml
-kubectl cluster-info
-kubectl get nodes
+sh infra/scripts/k8s-preflight.sh
 ```
 
-### Criar o namespace do projeto
+### Criar o cluster local
 
-Depois:
+Depois de instalar `kind`, o fluxo recomendado e:
 
 ```bash
-kubectl create namespace web-socket
+sh infra/scripts/kind-create-cluster.sh
 ```
 
 ### Aplicar manifests com Kustomize
@@ -140,7 +146,7 @@ kubectl create namespace web-socket
 Quando a base estiver pronta:
 
 ```bash
-kubectl apply -k infra/k8s/overlays/local-kind
+sh infra/scripts/k8s-apply-local-kind.sh
 ```
 
 ## 8. Politica minima de seguranca
@@ -187,3 +193,9 @@ Ao final desse laboratorio, voce vai conseguir:
 - observar pods e services
 - depurar rede e healthchecks
 - transferir esse entendimento para EKS depois
+
+## 12. Registro desta etapa
+
+O que foi feito nesta fase esta documentado em:
+
+- [docs/fase-14-laboratorio-kind.md](/home/alexandre/workspace/web-socket/docs/fase-14-laboratorio-kind.md)
