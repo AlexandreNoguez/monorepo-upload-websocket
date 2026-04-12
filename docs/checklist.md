@@ -136,8 +136,8 @@ Este checklist foi organizado para que você consiga estudar e implementar por p
 
 - [x] Criar estrutura `infra/k8s/base`
 - [x] Criar estrutura `infra/k8s/overlays/local-kind`
-- [ ] Criar `Deployment` e `Service` da `api`
-- [ ] Criar `Deployment` e `Service` do `image-processor-function`
+- [x] Criar `Deployment` e `Service` da `api`
+- [x] Criar `Deployment` e `Service` do `image-processor-function`
 - [ ] Criar recursos para `postgres` local de estudo
 - [ ] Criar recursos para `azurite` local de estudo
 - [ ] Criar `ConfigMap` e `Secret` de exemplo

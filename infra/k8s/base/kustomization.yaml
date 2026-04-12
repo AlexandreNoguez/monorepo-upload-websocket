@@ -3,3 +3,7 @@ kind: Kustomization
 
 resources:
   - namespace.yaml
+  - api-deployment.yaml
+  - api-service.yaml
+  - image-processor-function-deployment.yaml
+  - image-processor-function-service.yaml

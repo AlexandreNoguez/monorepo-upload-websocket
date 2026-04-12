@@ -115,6 +115,7 @@ O repositorio agora ja reserva a estrutura:
 - [infra/k8s/overlays/aws/README.md](/home/alexandre/workspace/web-socket/infra/k8s/overlays/aws/README.md)
 - [infra/scripts/k8s-preflight.sh](/home/alexandre/workspace/web-socket/infra/scripts/k8s-preflight.sh)
 - [infra/scripts/kind-create-cluster.sh](/home/alexandre/workspace/web-socket/infra/scripts/kind-create-cluster.sh)
+- [infra/scripts/kind-load-images.sh](/home/alexandre/workspace/web-socket/infra/scripts/kind-load-images.sh)
 - [infra/scripts/k8s-apply-local-kind.sh](/home/alexandre/workspace/web-socket/infra/scripts/k8s-apply-local-kind.sh)
 
 ## 7. Fluxo local recomendado
@@ -139,6 +140,14 @@ Depois de instalar `kind`, o fluxo recomendado e:
 
 ```bash
 sh infra/scripts/kind-create-cluster.sh
+```
+
+### Carregar imagens locais no cluster
+
+Depois de buildar as imagens locais:
+
+```bash
+sh infra/scripts/kind-load-images.sh
 ```
 
 ### Aplicar manifests com Kustomize
@@ -199,3 +208,4 @@ Ao final desse laboratorio, voce vai conseguir:
 O que foi feito nesta fase esta documentado em:
 
 - [docs/fase-14-laboratorio-kind.md](/home/alexandre/workspace/web-socket/docs/fase-14-laboratorio-kind.md)
+- [docs/fase-15-workloads-k8s.md](/home/alexandre/workspace/web-socket/docs/fase-15-workloads-k8s.md)

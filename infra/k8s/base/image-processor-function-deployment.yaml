@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: image-processor-function
+  labels:
+    app.kubernetes.io/name: image-processor-function
+    app.kubernetes.io/part-of: web-socket
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: image-processor-function
+      app.kubernetes.io/part-of: web-socket
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: image-processor-function
+        app.kubernetes.io/part-of: web-socket
+    spec:
+      containers:
+        - name: image-processor-function
+          image: web-socket-image-processor-function:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: FUNCTION_APP_PORT
+              value: "7071"
+            - name: APP_RUNTIME
+              value: "production"
+          ports:
+            - containerPort: 7071
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi

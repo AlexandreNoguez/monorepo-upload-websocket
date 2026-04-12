@@ -391,6 +391,14 @@ sh infra/scripts/kind-create-cluster.sh
 sh infra/scripts/k8s-apply-local-kind.sh
 ```
 
+### Carregar as imagens locais no cluster
+
+Quando os workloads reais estiverem sendo usados:
+
+```bash
+sh infra/scripts/kind-load-images.sh
+```
+
 ### O que isso aplica
 
 Neste momento, a base local aplica:

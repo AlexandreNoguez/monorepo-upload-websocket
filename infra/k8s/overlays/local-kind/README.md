@@ -11,3 +11,9 @@ Aqui entra o que for especifico do laboratorio local:
 Arquivo inicial:
 
 - [kustomization.yaml](/home/alexandre/workspace/web-socket/infra/k8s/overlays/local-kind/kustomization.yaml)
+
+Responsabilidades atuais:
+
+- definir namespace `web-socket`
+- apontar imagens para tags locais
+- usar `imagePullPolicy: Never` no laboratorio `kind`
