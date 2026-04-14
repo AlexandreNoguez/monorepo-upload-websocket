@@ -378,6 +378,14 @@ Depois que o `kind` estiver instalado:
 sh infra/scripts/kind-create-cluster.sh
 ```
 
+Se voce quiser o fluxo completo em um unico comando:
+
+```bash
+sh infra/scripts/k8s-bootstrap-local-kind.sh
+```
+
+Esse script junta build, cluster, load de imagens, preparo dos `.env` e apply dos manifests.
+
 ### O que esse script faz
 
 - usa [cluster.example.yaml](/home/alexandre/workspace/web-socket/infra/k8s/kind/cluster.example.yaml)

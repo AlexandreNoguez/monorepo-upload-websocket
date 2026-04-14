@@ -32,6 +32,7 @@ O fluxo que vamos construir é:
 - [Infraestrutura local da Fase 2](/home/alexandre/workspace/web-socket/docs/fase-2-infra-local.md)
 - [Preparação do ambiente de desenvolvimento](/home/alexandre/workspace/web-socket/docs/development-environment-setup.md)
 - [Plano de migração para Kubernetes](/home/alexandre/workspace/web-socket/docs/kubernetes-migration.md)
+- [Guia iniciante de Kubernetes](/home/alexandre/workspace/web-socket/docs/kubernetes-beginner-guide.md)
 - [Tutorial do laboratório local com kind](/home/alexandre/workspace/web-socket/docs/local-kind-tutorial.md)
 - [Registro da Fase 14](/home/alexandre/workspace/web-socket/docs/fase-14-laboratorio-kind.md)
 - [Registro da Fase 15](/home/alexandre/workspace/web-socket/docs/fase-15-workloads-k8s.md)

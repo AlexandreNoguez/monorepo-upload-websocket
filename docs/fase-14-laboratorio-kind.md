@@ -22,6 +22,7 @@ O foco aqui nao e deploy de aplicacao ainda. O foco e preparar o terreno.
 - [infra/k8s/overlays/local-kind/kustomization.yaml](/home/alexandre/workspace/web-socket/infra/k8s/overlays/local-kind/kustomization.yaml)
 - [infra/k8s/overlays/aws/kustomization.yaml](/home/alexandre/workspace/web-socket/infra/k8s/overlays/aws/kustomization.yaml)
 - [infra/scripts/k8s-preflight.sh](/home/alexandre/workspace/web-socket/infra/scripts/k8s-preflight.sh)
+- [infra/scripts/k8s-bootstrap-local-kind.sh](/home/alexandre/workspace/web-socket/infra/scripts/k8s-bootstrap-local-kind.sh)
 - [infra/scripts/kind-create-cluster.sh](/home/alexandre/workspace/web-socket/infra/scripts/kind-create-cluster.sh)
 - [infra/scripts/kind-delete-cluster.sh](/home/alexandre/workspace/web-socket/infra/scripts/kind-delete-cluster.sh)
 - [infra/scripts/k8s-apply-local-kind.sh](/home/alexandre/workspace/web-socket/infra/scripts/k8s-apply-local-kind.sh)
@@ -62,6 +63,7 @@ Tambem foi identificado que:
 
 ```bash
 sh infra/scripts/k8s-preflight.sh
+sh infra/scripts/k8s-bootstrap-local-kind.sh
 sh infra/scripts/kind-create-cluster.sh
 sh infra/scripts/k8s-apply-local-kind.sh
 sh infra/scripts/kind-delete-cluster.sh

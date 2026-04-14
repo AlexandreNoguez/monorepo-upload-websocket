@@ -114,11 +114,38 @@ O repositorio agora ja reserva a estrutura:
 - [infra/k8s/overlays/local-kind/README.md](/home/alexandre/workspace/web-socket/infra/k8s/overlays/local-kind/README.md)
 - [infra/k8s/overlays/aws/README.md](/home/alexandre/workspace/web-socket/infra/k8s/overlays/aws/README.md)
 - [infra/scripts/k8s-preflight.sh](/home/alexandre/workspace/web-socket/infra/scripts/k8s-preflight.sh)
+- [infra/scripts/k8s-bootstrap-local-kind.sh](/home/alexandre/workspace/web-socket/infra/scripts/k8s-bootstrap-local-kind.sh)
 - [infra/scripts/kind-create-cluster.sh](/home/alexandre/workspace/web-socket/infra/scripts/kind-create-cluster.sh)
 - [infra/scripts/kind-load-images.sh](/home/alexandre/workspace/web-socket/infra/scripts/kind-load-images.sh)
 - [infra/scripts/k8s-apply-local-kind.sh](/home/alexandre/workspace/web-socket/infra/scripts/k8s-apply-local-kind.sh)
 
 ## 7. Fluxo local recomendado
+
+### Subir tudo com um unico comando
+
+Para o fluxo completo do laboratorio local:
+
+```bash
+sh infra/scripts/k8s-bootstrap-local-kind.sh
+```
+
+Esse comando:
+
+- verifica prerequisitos
+- builda imagens locais
+- cria o cluster se necessario
+- carrega imagens no `kind`
+- prepara os arquivos `.env`
+- aplica os manifests
+- mostra o estado dos recursos
+
+### Quando usar o comando unico
+
+Use esse fluxo quando voce quiser:
+
+- preparar o laboratorio do zero
+- reduzir a chance de esquecer etapas
+- estudar a ordem correta do processo
 
 ### Subir o ambiente de desenvolvimento com Compose
 
@@ -238,3 +265,4 @@ O que foi feito nesta fase esta documentado em:
 
 - [docs/fase-14-laboratorio-kind.md](/home/alexandre/workspace/web-socket/docs/fase-14-laboratorio-kind.md)
 - [docs/fase-15-workloads-k8s.md](/home/alexandre/workspace/web-socket/docs/fase-15-workloads-k8s.md)
+- [docs/kubernetes-beginner-guide.md](/home/alexandre/workspace/web-socket/docs/kubernetes-beginner-guide.md)
