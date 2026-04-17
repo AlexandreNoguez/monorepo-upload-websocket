@@ -356,6 +356,41 @@ Para desenvolvimento, o fluxo principal e:
 docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
 ```
 
+Se seu usuario Linux/WSL nao usa `1000:1000` como UID/GID, informe isso antes de subir a stack:
+
+```bash
+export HOST_UID="$(id -u)"
+export HOST_GID="$(id -g)"
+```
+
+### Por que usamos `HOST_UID` e `HOST_GID`
+
+No desenvolvimento, o Compose monta pastas do seu computador dentro dos containers.
+
+Isso e otimo para hot reload, porque o NestJS enxerga suas alteracoes sem rebuild da imagem.
+
+Mas existe um cuidado importante: se o processo dentro do container roda como `root`, arquivos gerados durante o desenvolvimento podem aparecer no seu projeto com dono `root` ou `nobody`.
+
+Isso pode quebrar comandos locais como:
+
+```bash
+pnpm --filter @web-socket/api build
+```
+
+Por isso, no modo de desenvolvimento, os containers usam:
+
+```yaml
+user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+```
+
+Na pratica:
+
+- `HOST_UID` e o ID do seu usuario
+- `HOST_GID` e o ID do seu grupo principal
+- `1000:1000` e o valor padrao comum em Linux/WSL
+
+Esse ajuste faz arquivos gerados pelo container continuarem editaveis pelo seu usuario.
+
 ### O que esse comando faz
 
 - constroi as imagens locais
@@ -369,6 +404,33 @@ docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
 ```bash
 docker compose -f docker-compose.yml -f docker-compose.dev.yml ps
 ```
+
+### O que a API faz ao iniciar em desenvolvimento
+
+No modo local, a API roda este comando dentro do container:
+
+```bash
+pnpm prisma:generate && pnpm start:dev
+```
+
+Ele tem duas partes:
+
+- `pnpm prisma:generate` gera o Prisma Client usado pelo `PrismaService`
+- `pnpm start:dev` inicia o NestJS em modo watch
+
+Isso e necessario porque o Prisma Client fica em uma pasta gerada automaticamente e nao deve ser versionado.
+
+Tambem configuramos o TypeScript para salvar o cache incremental em:
+
+```bash
+apps/api/dist/.tsbuildinfo
+```
+
+Assim, o cache da compilacao fica junto do resultado compilado.
+
+Se o `dist/` for apagado, o cache tambem some.
+
+Isso evita o problema em que o TypeScript acredita que ja compilou tudo, mas o arquivo `dist/main.js` nao existe mais.
 
 ## 14. Criar o cluster local com kind
 
@@ -501,6 +563,33 @@ Isso costuma significar que:
 
 - o cluster ainda nao foi criado
 - ou o `kind` falhou ao criar o cluster
+
+### `container web-socket-api-1 is unhealthy`
+
+Primeiro veja os logs da API:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.dev.yml logs --tail=200 api
+```
+
+Se aparecer algo parecido com:
+
+```text
+Cannot find module '/workspace/apps/api/dist/main'
+```
+
+isso significa que o NestJS tentou executar o arquivo compilado, mas o `dist/main.js` nao foi criado.
+
+O caso mais comum e cache incremental antigo do TypeScript.
+
+Com a configuracao atual, o cache fica dentro de `dist/`, entao basta recriar a stack:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.dev.yml down
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
+```
+
+Se o problema envolver permissao em arquivos gerados pelo Prisma, confirme se voce exportou `HOST_UID` e `HOST_GID` antes de subir os containers.
 
 ## 19. Sequencia minima para um iniciante
 

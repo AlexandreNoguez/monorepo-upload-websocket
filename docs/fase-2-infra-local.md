@@ -226,6 +226,19 @@ Esse modo usa:
 - bind mounts
 - target `development`
 - a mesma base estrutural do compose principal
+- execucao com `HOST_UID` e `HOST_GID` para evitar arquivos gerados com dono `root`
+- geracao do Prisma Client antes do `start:dev` da API
+
+Se seu usuario nao for `1000:1000`, exporte os valores antes:
+
+```bash
+export HOST_UID="$(id -u)"
+export HOST_GID="$(id -g)"
+```
+
+Essa configuracao e importante porque o modo desenvolvimento monta a pasta do projeto dentro do container.
+
+Sem isso, ferramentas como Prisma e TypeScript poderiam gerar arquivos com permissoes erradas no seu proprio workspace.
 
 ### Validar a rede do modo desenvolvimento
 

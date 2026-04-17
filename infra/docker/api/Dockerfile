@@ -16,6 +16,8 @@ COPY apps/api/package.json /workspace/apps/api/package.json
 
 RUN pnpm install --filter @web-socket/api... --no-frozen-lockfile
 
+RUN chown -R node:node /workspace/node_modules /workspace/apps/api
+
 FROM dependencies AS development
 
 ENV APP_RUNTIME=development

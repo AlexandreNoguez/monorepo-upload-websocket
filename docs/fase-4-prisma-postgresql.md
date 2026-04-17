@@ -136,7 +136,47 @@ O `prisma.config.ts` descreve:
 
 Essa separacao e o caminho recomendado no Prisma 7.
 
-## 8. Comandos principais
+## 8. Prisma Client em runtime
+
+Existe uma diferenca importante entre CLI do Prisma e runtime da aplicacao.
+
+O `prisma.config.ts` ajuda comandos como:
+
+- `prisma generate`
+- `prisma validate`
+- `prisma migrate dev`
+
+Mas quando a API NestJS esta rodando, quem abre a conexao com o PostgreSQL e o `PrismaClient`.
+
+No Prisma 7, usando PostgreSQL direto, o client precisa receber um driver adapter.
+
+Por isso instalamos:
+
+```bash
+pnpm --filter @web-socket/api add @prisma/adapter-pg pg
+```
+
+E o [PrismaService](/home/alexandre/workspace/web-socket/apps/api/src/infrastructure/database/prisma.service.ts) cria o client assim:
+
+```ts
+new PrismaPg({
+  connectionString: process.env.DATABASE_URL,
+});
+```
+
+### Por que isso e necessario
+
+O adapter e a ponte concreta entre o Prisma Client e o driver real do banco.
+
+Sem ele, a API ate pode compilar, mas falha ao iniciar com uma mensagem dizendo que o `PrismaClient` precisa ser construido com opcoes validas.
+
+Essa separacao tambem conversa bem com Clean Architecture:
+
+- `domain` nao sabe que PostgreSQL existe
+- `application` futuramente vai depender de portas/repositories
+- `infrastructure` decide que a implementacao real usa Prisma + PostgreSQL
+
+## 9. Comandos principais
 
 Validar schema:
 

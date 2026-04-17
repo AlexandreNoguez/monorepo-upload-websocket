@@ -2,8 +2,11 @@ services:
   api:
     build:
       target: development
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+    command: ["sh", "-lc", "pnpm prisma:generate && pnpm start:dev"]
     environment:
       APP_RUNTIME: development
+      HOME: /tmp
     working_dir: /workspace/apps/api
     volumes:
       - ./package.json:/workspace/package.json:ro
@@ -15,8 +18,10 @@ services:
   image-processor-function:
     build:
       target: development
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
     environment:
       APP_RUNTIME: development
+      HOME: /tmp
     working_dir: /workspace/apps/image-processor-function
     volumes:
       - ./apps/image-processor-function:/workspace/apps/image-processor-function
