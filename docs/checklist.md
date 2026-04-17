@@ -22,12 +22,12 @@ Este checklist foi organizado para que você consiga estudar e implementar por p
 
 ## Fase 3. Base da API NestJS
 
-- [ ] Criar aplicação `NestJS`
-- [ ] Configurar módulos base
-- [ ] Criar estrutura por camadas: `domain`, `application`, `infrastructure`, `interfaces`
-- [ ] Configurar validação de ambiente
-- [ ] Configurar logging
-- [ ] Criar endpoint de health check
+- [x] Criar aplicação `NestJS`
+- [x] Configurar módulos base
+- [x] Criar estrutura por camadas: `domain`, `application`, `infrastructure`, `presentation`
+- [x] Configurar validação de ambiente
+- [x] Configurar logging
+- [x] Criar endpoint de health check
 
 ## Fase 4. Prisma e PostgreSQL
 

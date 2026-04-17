@@ -112,7 +112,7 @@ Com Clean Architecture, a dependência aponta para dentro:
 │   │   │   ├── domain
 │   │   │   ├── application
 │   │   │   ├── infrastructure
-│   │   │   └── interfaces
+│   │   │   └── presentation
 │   │   ├── prisma
 │   │   └── test
 │   └── image-processor-function
@@ -519,7 +519,7 @@ Contém:
 
 Aqui mora o “como a tecnologia faz”.
 
-## 10.4 `interfaces`
+## 10.4 `presentation`
 
 Contém:
 

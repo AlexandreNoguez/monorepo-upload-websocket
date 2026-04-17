@@ -3,5 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "description": "Monorepo de estudo para NestJS, Azure Functions, WebSocket, Azurite e PostgreSQL com DDD e Clean Architecture.",
-  "packageManager": "pnpm@10.8.1"
+  "packageManager": "pnpm@10.8.1",
+  "scripts": {
+    "api:build": "pnpm --filter @web-socket/api build",
+    "api:start": "pnpm --filter @web-socket/api start",
+    "api:start:dev": "pnpm --filter @web-socket/api start:dev",
+    "docker:up": "docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build",
+    "docker:down": "docker compose -f docker-compose.yml -f docker-compose.dev.yml down"
+  }
 }

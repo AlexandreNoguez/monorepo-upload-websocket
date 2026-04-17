@@ -30,6 +30,7 @@ O fluxo que vamos construir é:
 - [Checklist por etapas](/home/alexandre/workspace/web-socket/docs/checklist.md)
 - [Fundação da Fase 1](/home/alexandre/workspace/web-socket/docs/fase-1-fundacao.md)
 - [Infraestrutura local da Fase 2](/home/alexandre/workspace/web-socket/docs/fase-2-infra-local.md)
+- [Base da API NestJS da Fase 3](/home/alexandre/workspace/web-socket/docs/fase-3-api-nestjs.md)
 - [Preparação do ambiente de desenvolvimento](/home/alexandre/workspace/web-socket/docs/development-environment-setup.md)
 - [Plano de migração para Kubernetes](/home/alexandre/workspace/web-socket/docs/kubernetes-migration.md)
 - [Guia iniciante de Kubernetes](/home/alexandre/workspace/web-socket/docs/kubernetes-beginner-guide.md)
@@ -107,3 +108,11 @@ O laboratório Kubernetes agora já inclui:
 - `ConfigMap` e `Secret` gerados a partir de arquivos `.env`
 - `postgres` via `StatefulSet`
 - `azurite` com volume persistente
+
+A Fase 3 inicia a API real com:
+
+- aplicação NestJS em `apps/api`
+- estrutura inicial de Clean Architecture
+- health check em `/health`
+- validação básica de ambiente
+- logging de bootstrap
