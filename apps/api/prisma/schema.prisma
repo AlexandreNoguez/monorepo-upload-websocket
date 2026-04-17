@@ -1,0 +1,109 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/infrastructure/database/generated/prisma"
+  runtime      = "nodejs"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ImageAssetStatus {
+  UPLOAD_REQUESTED
+  UPLOADED
+  PROCESSING
+  PROCESSED
+  FAILED
+}
+
+enum ProcessingJobStatus {
+  QUEUED
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+enum ProcessedVariantKind {
+  THUMBNAIL
+  GRAYSCALE
+}
+
+enum ProcessingEventType {
+  UPLOAD_REQUESTED
+  UPLOAD_CONFIRMED
+  PROCESSING_STARTED
+  PROCESSING_PROGRESS
+  PROCESSING_COMPLETED
+  PROCESSING_FAILED
+}
+
+model ImageAsset {
+  id                    String             @id @default(uuid()) @db.Uuid
+  originalFileName      String             @map("original_file_name")
+  mimeType              String             @map("mime_type")
+  fileSizeInBytes       BigInt             @map("file_size_in_bytes")
+  originalBlobContainer String             @map("original_blob_container")
+  originalBlobKey       String             @unique @map("original_blob_key")
+  status                ImageAssetStatus   @default(UPLOAD_REQUESTED)
+  createdAt             DateTime           @default(now()) @map("created_at")
+  updatedAt             DateTime           @updatedAt @map("updated_at")
+  processingJobs        ProcessingJob[]
+
+  @@index([status])
+  @@map("image_assets")
+}
+
+model ProcessingJob {
+  id                 String              @id @default(uuid()) @db.Uuid
+  imageAssetId       String              @map("image_asset_id") @db.Uuid
+  status             ProcessingJobStatus @default(QUEUED)
+  progressPercentage Int                 @default(0) @map("progress_percentage")
+  failureReason      String?             @map("failure_reason")
+  functionExecutionId String?            @map("function_execution_id")
+  startedAt          DateTime?           @map("started_at")
+  completedAt        DateTime?           @map("completed_at")
+  createdAt          DateTime            @default(now()) @map("created_at")
+  updatedAt          DateTime            @updatedAt @map("updated_at")
+  imageAsset         ImageAsset          @relation(fields: [imageAssetId], references: [id], onDelete: Cascade)
+  processedVariants  ProcessedVariant[]
+  events             ProcessingEvent[]
+
+  @@index([imageAssetId])
+  @@index([status])
+  @@map("processing_jobs")
+}
+
+model ProcessedVariant {
+  id               String               @id @default(uuid()) @db.Uuid
+  processingJobId  String               @map("processing_job_id") @db.Uuid
+  variantKind      ProcessedVariantKind @map("variant_kind")
+  blobContainer    String               @map("blob_container")
+  blobKey          String               @unique @map("blob_key")
+  mimeType         String               @map("mime_type")
+  fileSizeInBytes  BigInt?              @map("file_size_in_bytes")
+  widthInPixels    Int?                 @map("width_in_pixels")
+  heightInPixels   Int?                 @map("height_in_pixels")
+  createdAt        DateTime             @default(now()) @map("created_at")
+  processingJob    ProcessingJob        @relation(fields: [processingJobId], references: [id], onDelete: Cascade)
+
+  @@unique([processingJobId, variantKind])
+  @@index([processingJobId])
+  @@map("processed_variants")
+}
+
+model ProcessingEvent {
+  id                 String              @id @default(uuid()) @db.Uuid
+  processingJobId    String              @map("processing_job_id") @db.Uuid
+  eventType          ProcessingEventType @map("event_type")
+  progressPercentage Int?                @map("progress_percentage")
+  message            String?
+  payload            Json?
+  occurredAt         DateTime            @default(now()) @map("occurred_at")
+  createdAt          DateTime            @default(now()) @map("created_at")
+  processingJob      ProcessingJob       @relation(fields: [processingJobId], references: [id], onDelete: Cascade)
+
+  @@index([processingJobId, occurredAt])
+  @@index([eventType])
+  @@map("processing_events")
+}

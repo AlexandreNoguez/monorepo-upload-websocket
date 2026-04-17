@@ -31,6 +31,7 @@ O fluxo que vamos construir é:
 - [Fundação da Fase 1](/home/alexandre/workspace/web-socket/docs/fase-1-fundacao.md)
 - [Infraestrutura local da Fase 2](/home/alexandre/workspace/web-socket/docs/fase-2-infra-local.md)
 - [Base da API NestJS da Fase 3](/home/alexandre/workspace/web-socket/docs/fase-3-api-nestjs.md)
+- [Prisma e PostgreSQL da Fase 4](/home/alexandre/workspace/web-socket/docs/fase-4-prisma-postgresql.md)
 - [Preparação do ambiente de desenvolvimento](/home/alexandre/workspace/web-socket/docs/development-environment-setup.md)
 - [Plano de migração para Kubernetes](/home/alexandre/workspace/web-socket/docs/kubernetes-migration.md)
 - [Guia iniciante de Kubernetes](/home/alexandre/workspace/web-socket/docs/kubernetes-beginner-guide.md)
@@ -116,3 +117,10 @@ A Fase 3 inicia a API real com:
 - health check em `/health`
 - validação básica de ambiente
 - logging de bootstrap
+
+A Fase 4 inicia a persistência com:
+
+- Prisma 7 configurado na API
+- schema inicial do ciclo de imagem/processamento
+- primeira migration SQL
+- `PrismaService` na camada `infrastructure`

@@ -31,10 +31,10 @@ Este checklist foi organizado para que você consiga estudar e implementar por p
 
 ## Fase 4. Prisma e PostgreSQL
 
-- [ ] Inicializar Prisma
-- [ ] Configurar conexão com PostgreSQL
-- [ ] Modelar tabelas iniciais
-- [ ] Gerar primeira migration
+- [x] Inicializar Prisma
+- [x] Configurar conexão com PostgreSQL
+- [x] Modelar tabelas iniciais
+- [x] Gerar primeira migration
 - [ ] Criar seed opcional para desenvolvimento
 - [ ] Criar implementações de repositório com Prisma
 

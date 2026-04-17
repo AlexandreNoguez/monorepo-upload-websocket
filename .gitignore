@@ -2,6 +2,10 @@
 node_modules/
 dist/
 build/
+*.tsbuildinfo
+prisma.config.js
+prisma.config.d.ts
+prisma.config.js.map
 .turbo/
 .pnpm-store/
 coverage/
@@ -35,6 +39,7 @@ yarn-error.log*
 # Prisma
 *.db
 *.db-journal
+apps/api/src/infrastructure/database/generated/
 
 # Docker / local infra
 .azurite/
