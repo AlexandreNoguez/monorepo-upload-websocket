@@ -32,6 +32,7 @@ O fluxo que vamos construir é:
 - [Infraestrutura local da Fase 2](/home/alexandre/workspace/web-socket/docs/fase-2-infra-local.md)
 - [Base da API NestJS da Fase 3](/home/alexandre/workspace/web-socket/docs/fase-3-api-nestjs.md)
 - [Prisma e PostgreSQL da Fase 4](/home/alexandre/workspace/web-socket/docs/fase-4-prisma-postgresql.md)
+- [Modelagem de domínio da Fase 5](/home/alexandre/workspace/web-socket/docs/fase-5-modelagem-dominio.md)
 - [Preparação do ambiente de desenvolvimento](/home/alexandre/workspace/web-socket/docs/development-environment-setup.md)
 - [Plano de migração para Kubernetes](/home/alexandre/workspace/web-socket/docs/kubernetes-migration.md)
 - [Guia iniciante de Kubernetes](/home/alexandre/workspace/web-socket/docs/kubernetes-beginner-guide.md)
@@ -124,3 +125,10 @@ A Fase 4 inicia a persistência com:
 - schema inicial do ciclo de imagem/processamento
 - primeira migration SQL
 - `PrismaService` na camada `infrastructure`
+
+A Fase 5 adiciona o domínio puro com:
+
+- entidades `ImageAsset`, `ProcessingJob` e `ProcessedVariant`
+- value objects principais
+- enums de status e eventos
+- invariantes de transição de estado

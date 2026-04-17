@@ -40,12 +40,12 @@ Este checklist foi organizado para que você consiga estudar e implementar por p
 
 ## Fase 5. Modelagem do domínio
 
-- [ ] Criar entidade `ImageAsset`
-- [ ] Criar entidade `ProcessingJob`
-- [ ] Criar entidade `ProcessedVariant`
-- [ ] Criar value objects principais
-- [ ] Definir enum de status do processamento
-- [ ] Definir invariantes de transição de estado
+- [x] Criar entidade `ImageAsset`
+- [x] Criar entidade `ProcessingJob`
+- [x] Criar entidade `ProcessedVariant`
+- [x] Criar value objects principais
+- [x] Definir enum de status do processamento
+- [x] Definir invariantes de transição de estado
 
 ## Fase 6. Casos de uso da API
 
