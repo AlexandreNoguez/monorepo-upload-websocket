@@ -23,6 +23,8 @@ Essa separacao evita que controllers, banco, framework e regra de negocio fiquem
 - [apps/api/src/main.ts](/home/alexandre/workspace/web-socket/apps/api/src/main.ts)
 - [apps/api/src/app.module.ts](/home/alexandre/workspace/web-socket/apps/api/src/app.module.ts)
 - [apps/api/src/infrastructure/config/application-config.ts](/home/alexandre/workspace/web-socket/apps/api/src/infrastructure/config/application-config.ts)
+- [apps/api/src/infrastructure/config/environment-variables.ts](/home/alexandre/workspace/web-socket/apps/api/src/infrastructure/config/environment-variables.ts)
+- [apps/api/src/infrastructure/config/configuration.module.ts](/home/alexandre/workspace/web-socket/apps/api/src/infrastructure/config/configuration.module.ts)
 - [apps/api/src/presentation/http/health/health.controller.ts](/home/alexandre/workspace/web-socket/apps/api/src/presentation/http/health/health.controller.ts)
 - [infra/docker/api/Dockerfile](/home/alexandre/workspace/web-socket/infra/docker/api/Dockerfile)
 
@@ -55,24 +57,49 @@ Isso foi intencional para manter compatibilidade com:
 
 Health check costuma ser infraestrutura, nao recurso de negocio.
 
-## 5. Por que validar ambiente sem biblioteca externa agora
+## 5. Por que usar `@nestjs/config`
 
-Nesta etapa, a validacao de ambiente foi criada de forma simples em codigo TypeScript.
+Agora usamos `@nestjs/config` para carregar e validar variaveis de ambiente.
 
-Isso evita adicionar complexidade antes da hora.
+Essa biblioteca e uma boa escolha em projetos NestJS porque resolve um problema comum da aplicacao:
 
-Mais tarde, quando as variaveis crescerem, podemos avaliar:
+- carregar `.env`
+- validar valores obrigatorios
+- aplicar defaults seguros para desenvolvimento
+- expor configuracao via dependency injection
+- evitar `process.env` espalhado pelo codigo
 
-- `zod`
-- `joi`
-- `class-validator`
+Mesmo usando `@nestjs/config`, mantemos uma camada tipada propria:
 
-Por enquanto, a API ja valida:
+```text
+infrastructure/config/application-config.ts
+```
+
+Isso e importante porque nao queremos que toda a aplicacao dependa de strings como:
+
+```ts
+configService.get('API_PORT')
+```
+
+Se esse padrao se espalha, fica facil errar nomes de variaveis e dificil entender quais configuracoes existem.
+
+Por isso, a aplicacao recebe um objeto nosso:
+
+```ts
+ApplicationConfig
+```
+
+Esse objeto representa a configuracao publica da API.
+
+O `@nestjs/config` fica como detalhe de infraestrutura.
+
+### O que validamos hoje
 
 - porta
 - runtime
 - prefixo
 - nome do servico
+- URL do banco
 
 ## 6. Padrao de nomes no codigo
 

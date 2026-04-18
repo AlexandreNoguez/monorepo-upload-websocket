@@ -1,13 +1,15 @@
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PrismaPg } from '@prisma/adapter-pg';
 
+import { ValidatedEnvironmentVariables } from '../config/environment-variables';
 import { PrismaClient } from './generated/prisma/client';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
-  public constructor() {
+  public constructor(configService: ConfigService<ValidatedEnvironmentVariables>) {
     super({
-      adapter: createPostgresqlAdapter(),
+      adapter: createPostgresqlAdapter(configService)
     });
   }
 
@@ -20,8 +22,10 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
   }
 }
 
-function createPostgresqlAdapter(): PrismaPg {
-  const databaseUrl = process.env.DATABASE_URL;
+function createPostgresqlAdapter(
+  configService: ConfigService<ValidatedEnvironmentVariables>
+): PrismaPg {
+  const databaseUrl = configService.get<string>('DATABASE_URL');
 
   if (!databaseUrl) {
     throw new Error('DATABASE_URL is required to initialize the Prisma PostgreSQL adapter.');

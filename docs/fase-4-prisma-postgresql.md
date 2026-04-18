@@ -156,11 +156,11 @@ Por isso instalamos:
 pnpm --filter @web-socket/api add @prisma/adapter-pg pg
 ```
 
-E o [PrismaService](/home/alexandre/workspace/web-socket/apps/api/src/infrastructure/database/prisma.service.ts) cria o client assim:
+E o [PrismaService](/home/alexandre/workspace/web-socket/apps/api/src/infrastructure/database/prisma.service.ts) cria o client usando a `DATABASE_URL` validada pelo `@nestjs/config`:
 
 ```ts
 new PrismaPg({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: databaseUrl,
 });
 ```
 
@@ -169,6 +169,10 @@ new PrismaPg({
 O adapter e a ponte concreta entre o Prisma Client e o driver real do banco.
 
 Sem ele, a API ate pode compilar, mas falha ao iniciar com uma mensagem dizendo que o `PrismaClient` precisa ser construido com opcoes validas.
+
+O `PrismaService` nao le `process.env` diretamente.
+
+Ele recebe `ConfigService` por dependency injection, e o `ConfigService` ja passou pela validacao centralizada no modulo de configuracao.
 
 Essa separacao tambem conversa bem com Clean Architecture:
 

@@ -4,17 +4,19 @@ import { LogLevel } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app.module';
-import { loadApplicationConfig } from './infrastructure/config/application-config';
+import { APPLICATION_CONFIG, ApplicationConfig } from './infrastructure/config/application-config';
 import { createBootstrapLogger } from './infrastructure/logging/create-bootstrap-logger';
 
 async function bootstrapApplication(): Promise<void> {
-  const applicationConfig = loadApplicationConfig(process.env);
+  const nestApplication = await NestFactory.create(AppModule, {
+    bufferLogs: true
+  });
+
+  const applicationConfig = nestApplication.get<ApplicationConfig>(APPLICATION_CONFIG);
   const bootstrapLogger = createBootstrapLogger(applicationConfig.runtimeEnvironment);
   const enabledLogLevels: LogLevel[] = bootstrapLogger.getEnabledLogLevels();
 
-  const nestApplication = await NestFactory.create(AppModule, {
-    logger: enabledLogLevels
-  });
+  nestApplication.useLogger(enabledLogLevels);
 
   if (applicationConfig.apiPrefix.length > 0) {
     // Health checks stay outside the API prefix so Docker and Kubernetes probes can use /health.

@@ -9,6 +9,7 @@ Este repositório vai servir como laboratório e base de estudo para um sistema 
 - `Azure Blob Storage` com `Azurite` para ambiente local
 - `PostgreSQL` como banco relacional
 - `Prisma` como ORM
+- `@nestjs/config` para configuração e validação de ambiente na API
 - `Docker` e `docker compose` para subir tudo localmente
 
 ## Objetivo do projeto
@@ -116,7 +117,7 @@ A Fase 3 inicia a API real com:
 - aplicação NestJS em `apps/api`
 - estrutura inicial de Clean Architecture
 - health check em `/health`
-- validação básica de ambiente
+- validação centralizada de ambiente com `@nestjs/config`
 - logging de bootstrap
 
 A Fase 4 inicia a persistência com:
